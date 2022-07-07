@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>ZESCO Issue Tracker | Update Status</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="icon" href="/assets/images/zescologo.png" type="image/x-icon"/>
+
+    <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <!-- bootstrap 5 css -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css" integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/custom.css">
+</head>
+<body th:object="${userDetails}">
+
+<nav class="navbar navbar-expand d-flex flex-column align-item-start" id="sidebar">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                <img src="/assets/images/zescologoL.png" alt="ZESCO Logo" class="img-fluid mb-3" width="200px" height="50">
+            </div>
+        </div>
+    </div>
+    <ul class="navbar-nav d-flex flex-column mt-5 w-100">
+        <li class="nav-item w-100">
+            <a th:href="@{/inspector/dashboard}" class="nav-link text-dark pl-4"><i class="fs-4 bi-speedometer2"></i>  Dashboard</a>
+        </li>
+        <li class="nav-item w-100">
+            <a th:href="@{'/inspector/equipments/' + ${userDetails.get(5)}}" class="nav-link text-dark pl-4 active"><i class="fs-4 bi-grid"></i>  Equipments</a>
+        </li>
+        <li class="nav-item w-100">
+            <a th:href="@{/about}"class="nav-link text-dark pl-4"><i class="fs-4 bi-info"></i>  About</a>
+        </li>
+    </ul>
+
+    <div class="mt-auto w-100" style="margin-bottom: 30px; margin-left: 30px;">
+        <div class="h4 mt-5 text-dark">[[${userDetails.get(2)}]] [[${userDetails.get(4)}]]</div>
+        <div class="h6 text-dark"><i>[[${userDetails.get(0)}]]</i></div>
+        <br>
+        <a th:href="@{/signout}" class="text-danger"  style="text-decoration: none">
+            <button type="submit" class="btn btn-outline-primary me-2 border-danger text-danger">
+                <i class="fs-4 bi-box-arrow-left"></i>
+                Logout</button>
+        </a>
+    </div>
+</nav>
+<section class="p-4 my-container" th:object="${equipment}">
+    <button class="btn my-4" id="menu-btn">Toggle Sidebar</button>
+
+    <div><h1>Update Status for [[${equipment.getName()}]]</h1></div>
+    <div><h5>At [[${equipment.getSite()}]]</h5></div>
+    <div><h5>Current Comment: <span class="text-success">[[${equipment.getComment()}]]</span></h5></div>
+    <br>
+        <form class="needs-validation" th:action = "@{/inspector/update_status}" method="POST" novalidate>
+            <input type="hidden" name="equipment-id" th:value="${equipment.getEquipment_ID()}" />
+            <input type="hidden" name="inspector-id" th:value="${equipment.getInspector_ID()}" />
+            <div class="col-md-6" style="text-align: left">
+                <label for="status" class="form-label">Equipment Status</label>
+                <textarea name="status" id="status" class="form-control" type="text" required></textarea>
+                <div class="invalid-feedback">
+                    Please provide a status!
+                </div>
+            </div>
+            <br>
+            <div class="card-body" style="width: 100%; align-content: center;">
+                <button class="btn btn-primary" type="submit">Save</button>
+                <br>
+                <br>
+                <a th:href="@{'/inspector/equipments/' + ${equipment.getInspector_ID()}}" class="h3 btn btn-primary">Your equipments</a>
+            </div>
+
+        </form>
+</section>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.min.js" integrity="sha384-5h4UG+6GOuV9qXh6HqOLwZMY4mnLPraeTrjT5v07o347pj6IkfuoASuGBhfDsp3d" crossorigin="anonymous"></script>
+<!-- custom js -->
+<script>
+    var menu_btn = document.querySelector("#menu-btn")
+    var sidebar = document.querySelector("#sidebar")
+    var container = document.querySelector(".my-container")
+    menu_btn.addEventListener("click", () => {
+        sidebar.classList.toggle("active-nav")
+        container.classList.toggle("active-cont")
+    })
+</script>
+</body>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+
+
+<!--<div class="container-fluid text-center" style="margin: 3% 15% auto; width: auto;" th:object="${equipment}">-->
+<!--    <div><h1>Update Status for [[${equipment.getName()}]]</h1></div>-->
+<!--    <div><h5>At [[${equipment.getSite()}]]</h5></div>-->
+<!--    <br>-->
+<!--    <div class="card-body" style="box-shadow: 0 0 5px lightgray; border: transparent; border-radius: 5px; width: auto;">-->
+<!--        <form class="needs-validation" th:action = "@{/inspector/update_status}" method="POST" novalidate>-->
+<!--            <br>-->
+<!--            <br>-->
+<!--            <input type="hidden" name="equipment-id" th:value="${equipment.getEquipment_ID()}" />-->
+<!--            <input type="hidden" name="inspector-id" th:value="${equipment.getInspector_ID()}" />-->
+<!--            <div class="col-md-6" style="text-align: left">-->
+<!--                <label for="status" class="form-label">Equipment Status</label>-->
+<!--                <textarea name="status" id="status" class="form-control" type="text" required></textarea>-->
+<!--                <div class="invalid-feedback">-->
+<!--                    Please provide a status!-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <br>-->
+<!--            <div class="card-body" style="width: 100%; align-content: center;">-->
+<!--                <button class="btn btn-primary" type="submit">Save</button>-->
+<!--                <br>-->
+<!--                <br>-->
+<!--                <a th:href="@{'/inspector/equipments/' + ${equipment.getInspector_ID()}}" class="h3 btn btn-primary">Your equipments</a>-->
+<!--            </div>-->
+
+<!--        </form>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--</body>-->
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+</html>
