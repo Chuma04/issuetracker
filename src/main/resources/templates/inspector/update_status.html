@@ -32,7 +32,7 @@
             <a th:href="@{'/inspector/equipments/' + ${userDetails.get(5)}}" class="nav-link text-dark pl-4 active"><i class="fs-4 bi-grid"></i>  Equipments</a>
         </li>
         <li class="nav-item w-100">
-            <a th:href="@{/about}"class="nav-link text-dark pl-4"><i class="fs-4 bi-info"></i>  About</a>
+            <a th:href="@{/about}"class="nav-link text-dark pl-4"><i class="fs-4 bi bi-file-person"></i>  About</a>
         </li>
     </ul>
 
@@ -59,17 +59,15 @@
             <input type="hidden" name="inspector-id" th:value="${equipment.getInspector_ID()}" />
             <div class="col-md-6" style="text-align: left">
                 <label for="status" class="form-label">Equipment Status</label>
-                <textarea name="status" id="status" class="form-control" type="text" required></textarea>
+                <textarea name="status" id="status" class="form-control" type="text" required>[[${equipment.getStatus()}]]</textarea>
                 <div class="invalid-feedback">
                     Please provide a status!
                 </div>
             </div>
             <br>
-            <div class="card-body" style="width: 100%; align-content: center;">
+            <div class="card-body" style="width: 100%;">
                 <button class="btn btn-primary" type="submit">Save</button>
-                <br>
-                <br>
-                <a th:href="@{'/inspector/equipments/' + ${equipment.getInspector_ID()}}" class="h3 btn btn-primary">Your equipments</a>
+                <a th:href="@{'/inspector/equipments/' + ${equipment.getInspector_ID()}}"><button type="button" class="btn btn-primary">Your equipments</button></a>
             </div>
 
         </form>

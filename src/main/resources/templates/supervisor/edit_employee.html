@@ -34,10 +34,10 @@
             <a th:href="@{/add_equipment}" class="nav-link text-dark pl-4"><i class="fs-4 bi-tools"></i>  Equipments</a>
         </li>
         <li class="nav-item w-100">
-            <a th:href="@{/employees}" class="nav-link text-dark active"><i class="fs-4 bi-people"></i>  Employees</a>
+            <a th:href="@{/employees}" class="nav-link text-dark pl-4 active"><i class="fs-4 bi-people"></i>  Employees</a>
         </li>
         <li class="nav-item w-100">
-            <a th:href="@{/about}"class="nav-link text-dark pl-4"><i class="fs-4 bi-info"></i>  About</a>
+            <a th:href="@{/about}"class="nav-link text-dark pl-4"><i class="fs-4 bi bi-file-person"></i>  About</a>
         </li>
     </ul>
 
@@ -150,9 +150,7 @@
 
             <div class="card-body" style="width: 100%; align-content: center;">
                 <button class="btn btn-primary" type="submit">Save</button>
-                <br>
-                <br>
-                <a th:href="@{/employees}" class="h3 btn btn-primary">Manage Employees</a>
+                <a th:href="@{/employees}" ><button class="btn btn-primary" type="button">Manage Employees</button></a>
             </div>
 
         </form>

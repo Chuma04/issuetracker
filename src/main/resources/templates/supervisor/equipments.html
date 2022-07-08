@@ -36,7 +36,7 @@
             <a th:href="@{/employees}" class="nav-link text-dark pl-4"><i class="fs-4 bi-people"></i>  Employees</a>
         </li>
         <li class="nav-item w-100">
-            <a th:href="@{/about}"class="nav-link text-dark pl-4"><i class="fs-4 bi-info"></i>  About</a>
+            <a th:href="@{/about}"class="nav-link text-dark pl-4"><i class="fs-4 bi bi-file-person"></i>  About</a>
         </li>
     </ul>
 
@@ -59,14 +59,14 @@
     <div th:if="${message}" class="alert alert-success text-center">
         [[${message}]]
     </div>
-    <div>
-    <table class="table noborder bg-white">
-        <thead class="table-light">
+    <div class="table-responsive rounded-2 shadow-2-strong p-3" th:if="${equipments}">
+        <table class="table table-striped rounded-2">
+        <thead>
         <tr>
             <th>Equipment ID</th>
             <th>Name</th>
             <th>Site</th>
-            <th>Status</th>
+            <th>Status/Issue</th>
             <th>Date Inspected</th>
             <th>Inspector (ID)</th>
             <th>Supervisor Comment</th>
@@ -79,13 +79,13 @@
                 <td>[[${equipment.getEquipment_ID()}]]</td>
                 <td>[[${equipment.getName()}]]</td>
                 <td>[[${equipment.getSite()}]]</td>
-                <td>[[${equipment.getStatus()}]]</td>
+                <td><i>[[${equipment.getStatus()}]]</i></td>
                 <td>[[${equipment.getDate_inspected()}]]</td>
                 <td>[[${equipment.getInspector()}]] ([[${equipment.getInspector_ID()}]])</td>
                 <td>[[${equipment.getComment()}]]</td>
                 <td>
                     <a th:href="@{'/comment/' + ${equipment.getEquipment_ID()}}"><i class="bi-pencil-square action-edit"></i></a>
-                    <a onclick="deleteFunction()" th:href="@{'supervisor/delete_equipment/' + ${equipment.getEquipment_ID()}}"><i class="bi-trash action-delete"></i></a>
+                    <a onclick="deleteFunction()" th:href="@{'/delete_equipment/' + ${equipment.getEquipment_ID()}}"><i class="bi-trash action-delete"></i></a>
                 </td>
             </tr>
         </th:block>

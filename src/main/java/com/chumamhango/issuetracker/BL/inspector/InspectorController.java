@@ -39,6 +39,15 @@ public class InspectorController {
 
         Equipment equipment = new Equipment();
         List<Equipment> equipments = equipment.getEquipmentsById(id);
+
+        String message = null;
+
+        if(equipments.isEmpty()){
+            equipments = null;
+            message = "You do not yet have any equipments assigned to you.";
+        }
+
+        model.addAttribute("message", message);
         model.addAttribute("equipments", equipments);
         model.addAttribute("userDetails", userDetails);
 

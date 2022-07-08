@@ -118,7 +118,8 @@ public class Employee {
         this.role = role;
     }
 
-    public void registerRequest(int userId, String title, String fName, String mName, String lName, String dob, String gender, String phone, String email) {
+    public static void registerRequest(int userId, String title, String fName, String mName, String lName, String dob,
+                                       String gender, String phone, String email) {
 
         Connect newConnect = new Connect();
         Connection conn = newConnect.connect();
@@ -332,7 +333,7 @@ public class Employee {
         return exists;
     }
 
-    public List<Employee> getEmployeesByRole(int roleId) {
+    public static List<Employee> getEmployeesByRole(int roleId) {
 
         List<Employee> employees = new ArrayList<Employee>();
 
@@ -383,7 +384,7 @@ public class Employee {
     }
 
     // count the number of supervisors in the database
-    public static int countSupervisors() {
+    public static int countUsersByRole(int role) {
         Connect newConnect = new Connect();
         Connection conn = newConnect.connect();
 
@@ -393,7 +394,7 @@ public class Employee {
             if (conn == null)
                 throw new SQLException();
 
-            String queryE = "SELECT * FROM employee e JOIN user u ON e.user_ID = u.user_ID WHERE u.role_ID = 1";
+            String queryE = "SELECT * FROM employee e JOIN user u ON e.user_ID = u.user_ID WHERE u.role_ID = " + role;
             Statement queryStatement = conn.createStatement();
             ResultSet eResult = queryStatement.executeQuery(queryE);
 

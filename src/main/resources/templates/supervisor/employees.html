@@ -37,7 +37,7 @@
             <a href="#" class="nav-link text-dark pl-4 active"><i class="fs-4 bi-people"></i>  Employees</a>
         </li>
         <li class="nav-item w-100">
-            <a th:href="@{/about}"class="nav-link text-dark pl-4"><i class="fs-4 bi-info"></i>  About</a>
+            <a th:href="@{/about}"class="nav-link text-dark pl-4"><i class="fs-4 bi bi-file-person"></i>  About</a>
         </li>
     </ul>
 
@@ -61,9 +61,9 @@
         [[${message}]]
     </div>
 
-    <div>
-    <table class="table noborder">
-        <thead class="table-light">
+    <div class="table-responsive rounded-2 shadow-2-strong p-3">
+        <table class="table table-striped rounded-2">
+            <thead>
         <tr>
             <th>Employee ID</th>
             <th>Username</th>

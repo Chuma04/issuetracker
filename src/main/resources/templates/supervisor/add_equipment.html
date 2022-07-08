@@ -37,7 +37,7 @@
             <a th:href="@{/employees}" class="nav-link text-dark pl-4"><i class="fs-4 bi-people"></i>  Employees</a>
         </li>
         <li class="nav-item w-100">
-            <a th:href="@{/about}"class="nav-link text-dark pl-4"><i class="fs-4 bi-info"></i>  About</a>
+            <a th:href="@{/about}"class="nav-link text-dark pl-4"><i class="fs-4 bi bi-file-person"></i>  About</a>
         </li>
     </ul>
 
@@ -54,12 +54,46 @@
 </nav>
 <section class="p-4 my-container">
     <button class="btn my-4" id="menu-btn">Toggle Sidebar</button>
-
+    <br>
+    <div><h1>Equipments available</h1></div>
+    <br>
+    <div th:if="${message}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+    <div class="table-responsive rounded-2 shadow-2-strong p-3" th:if="${equipments}">
+        <table class="table table-striped rounded-2">
+            <thead>
+            <tr>
+                <th>Equipment ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Site</th>
+                <th>Inspector (ID)</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="equipment : ${equipments}">
+                <tr>
+                    <td>[[${equipment.getEquipment_ID()}]]</td>
+                    <td>[[${equipment.getName()}]]</td>
+                    <td>[[${equipment.getDescription()}]]</td>
+                    <td>[[${equipment.getSite()}]]</td>
+                    <td>[[${equipment.getInspector()}]] ([[${equipment.getInspector_ID()}]])</td>
+                    <td>
+                        <a onclick="deleteFunction()" th:href="@{'/delete_equipment/' + ${equipment.getEquipment_ID()}}"><i class="bi-trash action-delete"></i></a>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <br>
     <div><h1>Add an Equipment</h1></div>
     <br>
     <div class="card-body" style="box-shadow: 0 0 5px lightgray; background-color: white; border: transparent; border-radius: 5px">
         <form class="row g-3 needs-validation" th:action = "@{supervisor/add_equipment}" method="POST" novalidate>
-            <br>
             <div class="col-md-6" style="text-align: left">
                 <label for="Fname" class="form-label">Equipment Name*</label>
                 <input type="text" class="form-control" id="Fname" name = "name" placeholder="Enter equipment name" required />
@@ -107,40 +141,6 @@
             </div>
         </form>
     </div>
-    <br><br>
-    <div><h1>Equipments available</h1></div>
-    <br>
-    <div th:if="${message}" class="alert alert-success text-center">
-        [[${message}]]
-    </div>
-    <div>
-        <table class="table noborder bg-white">
-            <thead class="table-light">
-            <tr>
-                <th>Equipment ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Site</th>
-                <th>Inspector (ID)</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <th:block th:each="equipment : ${equipments}">
-                <tr>
-                    <td>[[${equipment.getEquipment_ID()}]]</td>
-                    <td>[[${equipment.getName()}]]</td>
-                    <td>[[${equipment.getDescription()}]]</td>
-                    <td>[[${equipment.getSite()}]]</td>
-                    <td>[[${equipment.getInspector()}]] ([[${equipment.getInspector_ID()}]])</td>
-                    <td>
-                        <a onclick="deleteFunction()" th:href="@{'supervisor/delete_equipment/' + ${equipment.getEquipment_ID()}}"><i class="bi-trash action-delete"></i></a>
-                    </td>
-                </tr>
-            </th:block>
-            </tbody>
-        </table>
-    </div>
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
@@ -176,6 +176,11 @@
         sidebar.classList.toggle("active-nav")
         container.classList.toggle("active-cont")
     })
+</script>
+<script>
+    function deleteFunction(){
+        return confirm("Are you sure you want to delete this employee? This cannot be undone.");
+    }
 </script>
 </body>
 </html>

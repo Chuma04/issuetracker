@@ -49,7 +49,7 @@ public class User {
 
 
             if(uResult.next()){
-                Argon2PasswordEncoder hasher = new Argon2PasswordEncoder(16384, 8, 4, 32, 64);
+                Argon2PasswordEncoder hasher = new Argon2PasswordEncoder(32,64,1,15*1024,2);
 
                 String pwdQuery = "SELECT password FROM user WHERE username = '" + username + "'";
                 Statement pwdQueryStatement = conn.createStatement();
@@ -100,9 +100,8 @@ public class User {
         boolean valid = false;
 
         try {
-            Employee employee = new Employee();
-
-            if(employee.employeeExists(email)){
+//            Employee employee = new Employee();
+            if(Employee.employeeExists(email)){
                 return valid;
             }
 
@@ -128,7 +127,7 @@ public class User {
             }
 
             //hashing password
-            Argon2PasswordEncoder hasher = new Argon2PasswordEncoder(16384, 8, 4, 32, 64);
+            Argon2PasswordEncoder hasher = new Argon2PasswordEncoder(32,64,1,15*1024,2);
             String hashedPwd = hasher.encode(pwd);
 
             String query = "INSERT INTO user (username, password, role_ID) VALUES (?,?,?)";

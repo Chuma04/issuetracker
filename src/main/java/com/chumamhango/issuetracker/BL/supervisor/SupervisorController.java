@@ -17,20 +17,20 @@ import java.util.List;
 //@RequestMapping(path = "/supervisor")
 public class SupervisorController {
 
-    private Employee employee = new Employee();
-
+    public Employee employee = new Employee();
     @GetMapping("/register")
     public String register(Model model,
                            RedirectAttributes redirectAttribute,
                            HttpSession session) {
+        @SuppressWarnings("unchecked")
+        List<String> userDetails = (List<String>) session.getAttribute("userDetails");
+
         if (session.getAttribute("userDetails") == null) {
             redirectAttribute.addFlashAttribute("message", "Please signin as a supervisor first");
 
             return "redirect:/signin";
-        } else if (session.getAttribute("userDetails") != null) {
-            @SuppressWarnings("unchecked")
-            List<String> userDetails = (List<String>) session.getAttribute("userDetails");
-
+        }
+        else if (session.getAttribute("userDetails") != null) {
             if (!userDetails.get(0).equals("Supervisor")) {
                 redirectAttribute.addFlashAttribute("message", "signin as a supervisor to register a new employee");
 
@@ -38,14 +38,13 @@ public class SupervisorController {
             }
         }
 
-        model.addAttribute("user", employee);
+            model.addAttribute("userDetails", userDetails);
+            model.addAttribute("employee", employee);
 
-        employee = new Employee();
-
-        return "supervisor\\register";
+            return "supervisor\\register";
     }
 
-    @PostMapping("supervisor/register")
+    @PostMapping("/supervisor/register")
     public String registerRe(
             @RequestParam(value = "password") String pwd,
             @RequestParam(value = "role") String role,
@@ -62,7 +61,7 @@ public class SupervisorController {
         User user = new User();
 
         if (user.registerRequest(fName, lName, pwd, role, email)) {
-            employee.registerRequest(user.getUser_ID(), title, fName, mName, lName, dob, gender, phone, email);
+            Employee.registerRequest(user.getUser_ID(), title, fName, mName, lName, dob, gender, phone, email);
 
             redirectAttribute.addFlashAttribute("message", "Employee added successfully");
 
@@ -110,7 +109,7 @@ public class SupervisorController {
         List<Equipment> equipments = Equipment.getEquipments();
         List<Equipment> dashEquipments = null;
         String dashMessage = "You are all up to date with current issues!";
-        String dashMessage2 = "View current issues.";
+        String dashMessage2 = "View current issues";
 
         int count = 0;
         for(Equipment equipment: equipments){
@@ -135,7 +134,7 @@ public class SupervisorController {
         model.addAttribute("dashMessage", dashMessage);
         model.addAttribute("dashEquipments", dashEquipments);
         model.addAttribute("userDetails", userDetails);
-        model.addAttribute("dashMessae2", dashMessage2);
+        model.addAttribute("dashMessage2", dashMessage2);
 
         return "supervisor\\dashboard";
     }
@@ -182,7 +181,7 @@ public class SupervisorController {
             }
         }
 
-        employee = Employee.getEmployee(id);
+        Employee employee = Employee.getEmployee(id);
 
         model.addAttribute("employee", employee);
         model.addAttribute("userDetails", userDetails);
@@ -205,7 +204,7 @@ public class SupervisorController {
                                Model model,
                                HttpSession session) {
 
-        employee = Employee.getEmployee(Integer.parseInt(userId));
+        Employee employee = Employee.getEmployee(Integer.parseInt(userId));
 
         if ((email.equals(employee.getEmail()) || !Employee.employeeExists(email))) {
             Employee.updateEmployee(Integer.parseInt(userId), role, title, fName, mName, lName, dob, gender, phone, email);
@@ -250,7 +249,7 @@ public class SupervisorController {
             return "redirect:/signin";
         }
 
-        if(Employee.countSupervisors() == 1) {
+        if(Employee.countUsersByRole(1) == 1) {
             redirectAttribute.addFlashAttribute("message",
                     "You cannot delete the last supervisor");
             model.addAttribute("userDetails", userDetails);
@@ -288,6 +287,12 @@ public class SupervisorController {
         }
 
         List<Equipment> equipments = Equipment.getEquipments();
+        String message = null;
+        if(equipments.isEmpty()){
+            equipments = null;
+            message = "There no equipments available";
+        }
+        model.addAttribute("message", message);
         model.addAttribute("equipments", equipments);
         model.addAttribute("userDetails", userDetails);
 
@@ -313,13 +318,20 @@ public class SupervisorController {
             return "redirect:/signin";
         }
         List<Equipment> equipments = Equipment.getEquipments();
-        List<Employee> inspectors = new Employee().getEmployeesByRole(2);
+        List<Employee> inspectors = Employee.getEmployeesByRole(2);
         List<Site> sites = Site.getSites();
+        String message = null;
+
+        if(equipments.isEmpty()){
+            equipments = null;
+            message = "There are no equipments available";
+        }
 
         model.addAttribute("equipments", equipments);
         model.addAttribute("inspectors", inspectors);
         model.addAttribute("sites", sites);
         model.addAttribute("userDetails", userDetails);
+        model.addAttribute("message", message);
 
         return "supervisor\\add_equipment";
     }
@@ -384,5 +396,34 @@ public class SupervisorController {
         return "redirect:/supervisor/equipments";
     }
 
+    // handler for deleting an equipment
+    @GetMapping("/delete_equipment/{id}")
+    public String deleteEquipment(@PathVariable("id") int equipmentId,
+                                 RedirectAttributes redirectAttribute,
+                                 Model model,
+                                 HttpSession session) {
+        if (session.getAttribute("userDetails") == null) {
+            redirectAttribute.addFlashAttribute("message", "Please signin as a supervisor first");
 
+            return "redirect:/signin";
+        }
+
+        @SuppressWarnings("unchecked")
+        List<String> userDetails = (List<String>) session.getAttribute("userDetails");
+
+        if (!userDetails.get(0).equals("Supervisor")) {
+            redirectAttribute.addFlashAttribute("message",
+                    "signin as a supervisor to delete an equipment");
+
+            return "redirect:/signin";
+        }
+
+
+        Equipment.deleteEquipment(equipmentId);
+
+        redirectAttribute.addFlashAttribute("message", "Equipment deleted successfully");
+
+        model.addAttribute("userDetails", userDetails);
+        return "redirect:/add_equipment";
+    }
 }

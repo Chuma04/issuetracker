@@ -37,7 +37,7 @@
             <a th:href="@{/employees}" class="nav-link text-dark pl-4 class"><i class="fs-4 bi-people"></i>  Employees</a>
         </li>
         <li class="nav-item w-100">
-            <a th:href="@{/about}"class="nav-link text-dark pl-4"><i class="fs-4 bi-info"></i>  About</a>
+            <a th:href="@{/about}"class="nav-link text-dark pl-4"><i class="fs-4 bi bi-file-person"></i>  About</a>
         </li>
     </ul>
 
@@ -57,8 +57,8 @@
 
     <div><h1>Add an Employee</h1></div>
     <br>
-    <div class="card-body" style="box-shadow: 0 0 5px lightgray; border: transparent; border-radius: 5px">
-        <form class="row g-3 needs-validation" th:action = "@{supervisor/register}" method="POST" th:object="${user}" novalidate>
+    <div class="card-body " style="box-shadow: 0 0 5px lightgray; border: transparent; background-color: white; border-radius: 5px">
+        <form class="row g-3 needs-validation" th:action = "@{/supervisor/register}" method="POST" th:object="${employee}" novalidate>
             <br>
             <div class="col-md-6" style="text-align: left">
                 <label for="Pwd" class="form-label">Password</label>
@@ -70,7 +70,7 @@
             <br>
             <div class="col-md-6" style="text-align: left">
                 <label for="role" class="form-label">Role</label>
-                <select name = "role" id = "role" class="form-control" th:value="${user.getRole()}" required>
+                <select name = "role" id = "role" class="form-control" th:value="${employee.getRole()}" required>
                     <option value = "Supervisor">Supervisor</option>
                     <option value = "Inspector">Inspector</option>
                 </select>
@@ -81,7 +81,7 @@
             <br>
             <div class="col-md-6" style="text-align: left">
                 <label for="Fname" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="Fname" name = "first-name" placeholder="Enter first name" th:value="${user.getFname()}" required />
+                <input type="text" class="form-control" id="Fname" name = "first-name" placeholder="Enter first name" th:value="${employee.getFname()}" required />
                 <div class="invalid-feedback">
                     Please provide a first name!
                 </div>
@@ -89,12 +89,12 @@
             <br>
             <div class="col-md-6" style="text-align: left">
                 <label for="Mname" class="form-label">Middle Name</label>
-                <input type="text" class="form-control" id="Mname" name = "middle-name" placeholder="Enter middle name" th:value="${user.getMname()}" />
+                <input type="text" class="form-control" id="Mname" name = "middle-name" placeholder="Enter middle name" th:value="${employee.getMname()}" />
             </div>
             <br>
             <div class="col-md-6"style="text-align: left">
                 <label for="Lname" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="Lname" name = "last-name" placeholder="Enter last name" th:value="${user.getLname()}" required>
+                <input type="text" class="form-control" id="Lname" name = "last-name" placeholder="Enter last name" th:value="${employee.getLname()}" required>
                 <div class="invalid-feedback">
                     Please provide a last name!
                 </div>
@@ -102,7 +102,7 @@
             <br>
             <div class="col-md-6" style="text-align: left">
                 <label for="title" class="form-label">Title</label>
-                <select name = "title" id = "title" class="form-control" th:value="${user.getTitle()}" required>
+                <select name = "title" id = "title" class="form-control" th:value="${employee.getTitle()}" required>
                     <option value = "Dr">Dr</option>
                     <option value = "Mr">Mr</option>
                     <option value = "Ms">Ms</option>
@@ -116,7 +116,7 @@
             <br>
             <div class="form-group col-md-6" style="text-align: left"> <!-- Date input -->
                 <label class="form-label" for="date">Date</label>
-                <input class="form-control" id="date" name="d-o-b" placeholder="MM/DD/YYY" type="date" th:value="${user.getDob()}" required/>
+                <input class="form-control" id="date" name="d-o-b" placeholder="MM/DD/YYY" type="date" th:value="${employee.getDob()}" required/>
                 <div class="invalid-feedback">
                     Please provide a date of birth!
                 </div>
@@ -124,7 +124,7 @@
             <br>
             <div class="col-md-6" style="text-align: left">
                 <label for="gender" class="form-label">Gender</label>
-                <select name = "gender" id = "gender" class="form-control" placeholder="Select a gender" th:value="${user.getGender()}" required>
+                <select name = "gender" id = "gender" class="form-control" placeholder="Select a gender" th:value="${employee.getGender()}" required>
                     <option value = "Male">Male</option>
                     <option value = "Female">Female</option>
                 </select>
@@ -135,7 +135,7 @@
             <br>
             <div class="col-md-6" style="text-align: left">
                 <label for="phone" class="form-label">Phone Number</label>
-                <input type="text" class="form-control" id="phone" name = "phone" placeholder="Enter phone number" th:value="${user.getPhone_number()}" required>
+                <input type="text" class="form-control" id="phone" name = "phone" placeholder="Enter phone number" th:value="${employee.getPhone_number()}" required>
                 <div class="invalid-feedback">
                     Please provide a phone number!
                 </div>
@@ -153,9 +153,7 @@
 
             <div class="card-body" style="width: 100%; align-content: center;">
                 <button class="btn btn-primary" type="submit">Submit form</button>
-                <br>
-                <br>
-                <a th:href="@{/employees}" class="h3 btn btn-primary">Manage Employees</a>
+                <a th:href="@{/employees}"><button class="btn btn-primary" type="button">Manage Employee</button></a>
             </div>
 
         </form>

@@ -18,7 +18,6 @@ public class Equipment {
     private String status;
     private String date_inspected;
     private String comment;
-
     public String getSite() {
         return site;
     }
@@ -209,7 +208,10 @@ public class Equipment {
         Equipment equipment = new Equipment();
 
         try {
-            String query = "SELECT e.equipment_ID, e.name, e.inspector_ID, e.comment, s.description, st.state FROM equipment e Join site s ON e.site_ID = s.site_ID JOIN status st ON e.status_ID = st.status_ID WHERE equipment_ID = " + equipmentId;
+            String query = "SELECT e.equipment_ID, e.name, e.inspector_ID, e.comment, s.description, st.state, " +
+                    "em.fname, em.lname FROM equipment e Join site s ON e.site_ID = s.site_ID JOIN status st " +
+                    "ON e.status_ID = st.status_ID JOIN employee em on em.employee_ID = e.inspector_ID" +
+                    " WHERE equipment_ID = " + equipmentId;
             Statement st = conn.createStatement();
             ResultSet result = st.executeQuery(query);
 
@@ -221,6 +223,7 @@ public class Equipment {
             equipment.setSite(result.getString("description"));
             equipment.setStatus(result.getString("state"));
             equipment.setComment(result.getString("comment"));
+            equipment.setInspector(result.getString("fname") + " " + result.getString("lname"));
         }
         catch (SQLException e){
 
@@ -328,6 +331,27 @@ public class Equipment {
 
         }
         finally{
+            if(conn != null)
+                newConnect.disconnect(conn);
+        }
+    }
+
+    public static void deleteEquipment(int equipmentId) {
+        Connect newConnect = new Connect();
+        Connection conn = newConnect.connect();
+
+        try{
+            String dQuery = "DELETE FROM equipment WHERE equipment_ID = ?";
+            PreparedStatement st = conn.prepareStatement(dQuery);
+
+            st.setInt(1, equipmentId);
+
+            st.executeUpdate();
+        }
+        catch (SQLException e){
+
+        }
+        finally {
             if(conn != null)
                 newConnect.disconnect(conn);
         }

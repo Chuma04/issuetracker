@@ -59,10 +59,10 @@ public class Auth {
                model.addAttribute("userDetails", userDetails);
 
                if(employee.getRole().equals("Supervisor")){
-                   return "supervisor\\dashboard";
+                   return "redirect:/supervisor/dashboard";
                }
                else {
-                   return "inspector\\dashboard";
+                   return "redirect:/inspector/dashboard";
                }
            }
            else if (result.equals("pwd Error")) {

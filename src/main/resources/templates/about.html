@@ -2,17 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/html">
 <head>
-  <title>ZESCO Issue Tracker | About</title>
+  <title>ZESCO Issue Tracker | Equipments</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <link rel="icon" href="/assets/images/zescologo.png" type="image/x-icon"/>
 
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css" integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
   <link rel="stylesheet" type="text/css" href="/assets/css/custom.css">
 </head>
-<body style="padding: 3%;">
+<body class="py-5">
 <div class="w-100 text-center">
 <span class="mx-auto h1">About the Developer</span>
 </div>
@@ -24,14 +22,14 @@
     <p class="card-text">Hi there! Thanks for visiting my Issue Tracking Web App. Let me know what can be improved</p>
   </div>
   <ul class="list-group list-group-flush">
-    <li class="list-group-item"><b><i class="bi-person about-icon"></i></b>SIN: 19135090</li>
-    <li class="list-group-item"><i class="bi bi-mortarboard"></i>Program: Computer Engineering</li>
-    <li class="list-group-item"><b><i class="bi-book about-icon"></i></b>Course: CS 350 - OOP in Java</li>
-    <li class="list-group-item"><b><i class="bi-telephone about-icon"></i></b>Phone: <a class="contact" href="tel:+260975870923">+260 975 870 923</a></li>
-    <li class="list-group-item"><b><i class="bi bi-envelop about-icon"></i></b>Email: <a class="contact" href="mailto:chumamhango04@gmail.com">chumamhango04@gmail.com</a></li>
+    <li class="list-group-item"><i class="bi-person about-icon"></i>SIN: 19135090</li>
+    <li class="list-group-item"><i class="bi-briefcase about-icon"></i>Program: Computer Engineering</li>
+    <li class="list-group-item"><i class="bi-book about-icon"></i>Course: CS 350 - Object Oriented Programming in Java</li>
+    <li class="list-group-item"><i class="bi-telephone about-icon"></i>Phone: <a class="card-link" href="tel:+260975870923">+260 975 870 923</a></li>
+    <li class="list-group-item"><i class="bi-envelope about-icon"></i>Email: <a class="card-link" href="mailto:chumamhango04@gmail.com">chumamhango04@gmail.com</a></li>
   </ul>
   <div class="card-body text-center w-100">
-    <a th:href="@{/}" class="btn btn-primary">Back to Home</a>
+    <a th:href="@{/signin}" class="btn btn-primary">Dashboard or Sign in</a>
   </div>
 </div>
 

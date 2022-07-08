@@ -63,9 +63,10 @@ body {
 .btn.btn-primary {
     background-color: #ff9900 !important;
     border: solid 2px #ff9900 !important;
-    border-radius: 6px !important;
+    border-radius: 5px !important;
     padding: 6px 40px !important;
-    width: 250px !important;
+    /*width: 250px !important;*/
+    margin-right: 10px !important;
 }
 
 .btn-primary:hover {
@@ -102,7 +103,7 @@ a .action-delete:hover {
 
 .about-icon{
     color: #256E18FF !important;
-    margin-right: 15px !important;
+    margin-right: 12px !important;
     font-weight: bold;
 }
 
@@ -111,9 +112,10 @@ a .action-delete:hover {
     color: #000 !important;
 }
 
-.card.shadow-2-strong{
+.shadow-2-strong{
     border: transparent !important;
-    box-shadow: 0 0 5px 2px #eaeaea !important;
+    border-radius: .6rem !important;
+    box-shadow: 0 0 5px 2px #e5e5e5 !important;
 }
 
 .my-container.tb-ctn{
@@ -125,7 +127,15 @@ a .action-delete:hover {
     width: 100% !important;
 }
 
-.contact{
-    text-decoration: none !important;
+.card.dash-card{
+    margin-right: auto !important;
+}
+
+.card-link, .card.card-link{
     color: #256E18 !important;
+}
+
+.card-link:hover{
+    color: #164d0c !important;
+    text-decoration: none !important;
 }
