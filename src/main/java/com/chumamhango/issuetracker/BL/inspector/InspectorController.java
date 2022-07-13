@@ -10,12 +10,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class InspectorController {
     @GetMapping("/inspector/equipments/{id}")
-    public String viewEquipments(@PathVariable("id") int id, Model model, RedirectAttributes redirectAttribute, HttpSession session) {
+    public String viewEquipments(@PathVariable("id") int id,
+                                 Model model,
+                                 RedirectAttributes redirectAttribute,
+                                 HttpSession session) {
         if (session.getAttribute("userDetails") == null) {
             redirectAttribute.addFlashAttribute("error", "You must be logged in to view this page.");
 
@@ -37,8 +41,7 @@ public class InspectorController {
             return "redirect:/inspector/dashboard";
         }
 
-        Equipment equipment = new Equipment();
-        List<Equipment> equipments = equipment.getEquipmentsById(id);
+        List<Equipment> equipments = Equipment.getEquipmentsById(id);
 
         String message = null;
 
@@ -69,10 +72,37 @@ public class InspectorController {
             redirectAttribute.addFlashAttribute("message", "You must be an inspector to view this page.");
             model.addAttribute("userDetails", userDetails);
 
-            return "supervisor\\dashboard";
+            return "redirect:/supervisor/dashboard";
+        }
+        List<Equipment> equipments = Equipment.getEquipmentsById(Integer.parseInt(userDetails.get(5)));
+        List<Equipment> dashEquipments = null;
+        String dashMessage = "There are no new comments from supervisors.";
+        String dashMessage2 = "View Your Equipments";
+
+        int count = 0;
+        for(Equipment equipment: equipments){
+            if((equipment.getStatusId() != 1) && (equipment.getComment() != null)){
+                count++;
+            }
         }
 
+        if(count > 0){
+            dashEquipments = new ArrayList<>();
+
+            for(Equipment equipment: equipments){
+                if((equipment.getStatusId() != 1) && (equipment.getComment() != null)){
+                    dashEquipments.add(equipment);
+                }
+            }
+
+            dashMessage = "You have comments from your supervisors.";
+            dashMessage2 = null;
+        }
+
+        model.addAttribute("dashMessage", dashMessage);
+        model.addAttribute("dashEquipments", dashEquipments);
         model.addAttribute("userDetails", userDetails);
+        model.addAttribute("dashMessage2", dashMessage2);
 
         return "inspector\\dashboard";
     }
@@ -111,10 +141,13 @@ public class InspectorController {
     @PostMapping("/inspector/update_status")
     public String updateStatus(@RequestParam("equipment-id") String equipmentId,
                                @RequestParam("status") String status,
-                               @RequestParam("inspector-id") String inspectorId, Model model, RedirectAttributes redirectAttribute) {
+                               @RequestParam("inspector-id") String inspectorId,
+                               @RequestParam("status-radio") String statusType,
+                               Model model,
+                               RedirectAttributes redirectAttribute) {
 
 
-        Equipment.updateStatus(Integer.parseInt(equipmentId), status);
+        Equipment.updateStatus(Integer.parseInt(equipmentId), status, statusType);
 
         model.addAttribute("inspectorId", inspectorId);
         redirectAttribute.addFlashAttribute("message", "Equipment status updated successfully.");

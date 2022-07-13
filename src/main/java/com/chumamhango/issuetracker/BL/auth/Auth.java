@@ -54,6 +54,7 @@ public class Auth {
                userDetails.add(employee.getGender());
                userDetails.add(employee.getPhone_number());
                userDetails.add(employee.getEmail());
+               userDetails.add("" + user.getUser_ID());
 
                request.getSession().setAttribute("userDetails", userDetails);
                model.addAttribute("userDetails", userDetails);

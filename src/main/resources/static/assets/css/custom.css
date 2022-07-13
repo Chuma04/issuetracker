@@ -51,14 +51,25 @@ body {
     margin-left: 250px;
 }
 
-#menu-btn {
-    background-color: #256e18;
-    color: #fff;
+#menu-btn, .btn.btn-primary.green-btn {
+    background-color: #256e18 !important;
+    color: #fff !important;
 }
 
-#menu-btn:focus {
+.btn.btn-primary.green-btn{
+    border: 2px solid #256e18 !important;
+}
+
+.btn.btn-primary.green-btn:hover{
+    background-color: #fff !important;
+    color: #256e18 !important;
+}
+
+#menu-btn:hover {
     box-shadow: 0 0 0 0.25rem #69ad62;
 }
+
+
 
 .btn.btn-primary {
     background-color: #ff9900 !important;
@@ -84,11 +95,24 @@ a .action-edit, a .action-delete{
     background-color: #d92304 !important;
 }
 
+#status-good{
+    accent-color: #256e18 !important;
+}
+
+#status-bad{
+    accent-color: #d92304 !important;
+}
+
+.action-btn{
+    background: none !important;
+    border: transparent !important;
+}
+
 a .action-edit{
     color: #30811f !important;
 }
 
-a .action-delete{
+.action-delete{
     color: #b61d04 !important;
 }
 
@@ -114,7 +138,7 @@ a .action-delete:hover {
 .shadow-2-strong{
     border: transparent !important;
     border-radius: .6rem !important;
-    box-shadow: 0 0 5px 2px #e5e5e5 !important;
+    box-shadow: 0 0 5px lightgray !important;
 }
 
 .my-container.tb-ctn{

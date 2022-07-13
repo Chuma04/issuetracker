@@ -58,7 +58,7 @@ public class Site {
             }
         }
         catch (SQLException e){
-
+            e.printStackTrace();
         }
         finally {
             if(conn != null)

@@ -194,7 +194,7 @@ public class Employee {
                 employees.add(employee);
             }
         } catch (SQLException e) {
-
+            e.printStackTrace();
         } finally {
             if (conn != null)
                 newConnect.disconnect(conn);
@@ -235,7 +235,7 @@ public class Employee {
             employee.setEmail(eResult.getString("email"));
         }
         catch (SQLException e){
-
+            e.printStackTrace();
         }
         finally {
             if(conn != null)
@@ -289,7 +289,7 @@ public class Employee {
         }
     }
 
-    public static void deleteEmployee(int userId){
+    public static void deleteEmployee(int userId) throws Exception {
         Connect newConnect = new Connect();
         Connection conn = newConnect.connect();
 
@@ -302,7 +302,7 @@ public class Employee {
             st.executeUpdate();
         }
         catch (SQLException e){
-
+            throw new Exception("SQL Exception");
         }
         finally {
             if(conn != null)

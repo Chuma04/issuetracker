@@ -2,14 +2,11 @@ package com.chumamhango.issuetracker.DAL;
 
 import java.sql.*;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
-import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 public class User {
     private int user_ID;
 
     private String username;
-
-    private String password;
 
     private int role_ID;
 
@@ -67,9 +64,6 @@ public class User {
 
                     this.setUser_ID(result.getInt("user_ID"));
 
-                    //this.setUsername(result.getString("username"));
-                    //this.setRole_ID(result.getInt("role_ID"));
-
                     return "allowed"; // Supervisor or Inspector dashboard
                 }
                 else{
@@ -100,7 +94,6 @@ public class User {
         boolean valid = false;
 
         try {
-//            Employee employee = new Employee();
             if(Employee.employeeExists(email)){
                 return valid;
             }
@@ -118,7 +111,7 @@ public class User {
             Statement uQueryStatement = conn.createStatement();
             ResultSet uResult = uQueryStatement.executeQuery(uQuery);
 
-            // finding unique username with concatination of first name and last name
+            // finding unique username with concatenation of first name and last name
             int increment = 0;
             while(uResult.next()){
                 username = username + String.format("%02d", ++increment);

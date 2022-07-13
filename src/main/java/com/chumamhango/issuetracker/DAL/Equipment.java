@@ -13,11 +13,18 @@ public class Equipment {
     private String inspector;
     private String name;
     private String site;
+
+    private String supervisor;
+
+    private String statusType;
+    private int site_ID;
     private String description;
     private int statusId;
     private String status;
     private String date_inspected;
     private String comment;
+
+
     public String getSite() {
         return site;
     }
@@ -50,6 +57,21 @@ public class Equipment {
         return description;
     }
 
+    public int getSite_ID() {
+        return site_ID;
+    }
+    public String getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(String supervisor) {
+        this.supervisor = supervisor;
+    }
+
+    public void setSite_ID(int site_ID) {
+        this.site_ID = site_ID;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -64,6 +86,13 @@ public class Equipment {
 
     public String getDate_inspected() {
         return date_inspected;
+    }
+    public String getStatusType() {
+        return statusType;
+    }
+
+    public void setStatusType(String statusType) {
+        this.statusType = statusType;
     }
 
     public void setDate_inspected(String date_inspected) {
@@ -98,7 +127,7 @@ public class Equipment {
         this.statusId = statusId;
     }
 
-    public List<Equipment> getEquipmentsById(int id) {
+    public static List<Equipment> getEquipmentsById(int id) {
         Connect newConnect = new Connect();
         Connection conn = newConnect.connect();
         Equipment equipment;
@@ -113,11 +142,25 @@ public class Equipment {
             while(result.next()){
                 equipment = new Equipment();
 
+                String supId = result.getString("supervisor_ID");
+
+                if(supId != null){
+                    String supQuery2 = "SELECT fname, lname from employee where employee_ID = " + Integer.parseInt(supId);
+                    Statement supSt2 = conn.createStatement();
+                    ResultSet supResult2 = supSt2.executeQuery(supQuery2);
+                    supResult2.next();
+                    equipment.setSupervisor(supResult2.getString("fname") + " " + supResult2.getString("lname"));
+                }
+                else{
+                    equipment.setSupervisor("");
+                }
+
                 equipment.setEquipment_ID(result.getInt("Equipment_ID"));
                 equipment.setInspector_ID(result.getInt("inspector_ID"));
                 equipment.setName(result.getString("name"));
                 equipment.setSite(result.getString("description"));
                 equipment.setStatus(result.getString("state"));
+                equipment.setStatusType(result.getString("status_type"));
                 equipment.setDate_inspected(result.getString("date_inspected"));
                 equipment.setComment(result.getString("comment"));
 
@@ -125,7 +168,7 @@ public class Equipment {
             }
         }
         catch (SQLException e){
-
+            e.printStackTrace();
         }
         finally {
             if(conn != null)
@@ -140,7 +183,7 @@ public class Equipment {
         Connection conn = newConnect.connect();
         Equipment equipment;
 
-        List<Equipment> equipments = new ArrayList<Equipment>();
+        List<Equipment> equipments = new ArrayList<>();
 
         try{
             String query = "SELECT * FROM equipment eq JOIN site s ON eq.site_ID = s.site_ID " +
@@ -159,6 +202,7 @@ public class Equipment {
                 equipment.setStatus(result.getString("state"));
                 equipment.setInspector(result.getString("fname") + " " + result.getString("lname"));
                 equipment.setDate_inspected(result.getString("date_inspected"));
+                equipment.setStatusType(result.getString("status_type"));
                 equipment.setStatusId(result.getInt("status_ID"));
                 equipment.setComment(result.getString("comment"));
 
@@ -166,7 +210,7 @@ public class Equipment {
             }
         }
         catch (SQLException e){
-
+            e.printStackTrace();
         }
         finally {
             if(conn != null)
@@ -208,8 +252,7 @@ public class Equipment {
         Equipment equipment = new Equipment();
 
         try {
-            String query = "SELECT e.equipment_ID, e.name, e.inspector_ID, e.comment, s.description, st.state, " +
-                    "em.fname, em.lname FROM equipment e Join site s ON e.site_ID = s.site_ID JOIN status st " +
+            String query = "SELECT * FROM equipment e Join site s ON e.site_ID = s.site_ID JOIN status st " +
                     "ON e.status_ID = st.status_ID JOIN employee em on em.employee_ID = e.inspector_ID" +
                     " WHERE equipment_ID = " + equipmentId;
             Statement st = conn.createStatement();
@@ -222,7 +265,10 @@ public class Equipment {
             equipment.setName(result.getString("name"));
             equipment.setSite(result.getString("description"));
             equipment.setStatus(result.getString("state"));
+            equipment.setDescription(result.getString("equipment_desc"));
+            equipment.setStatusType(result.getString("status_type"));
             equipment.setComment(result.getString("comment"));
+            equipment.setSite_ID(result.getInt("site_ID"));
             equipment.setInspector(result.getString("fname") + " " + result.getString("lname"));
         }
         catch (SQLException e){
@@ -236,7 +282,7 @@ public class Equipment {
         return equipment;
     }
 
-    public static void updateStatus(int equipmentId, String status) {
+    public static void updateStatus(int equipmentId, String status, String statusType) {
         // TODO: Update status of equipment
         Connect newConnect = new Connect();
         Connection conn = newConnect.connect();
@@ -255,9 +301,10 @@ public class Equipment {
 
             if(statusId == 1){
                 // insert new status
-                String sQuery = "INSERT INTO status (state) VALUES (?)";
+                String sQuery = "INSERT INTO status (state, status_type) VALUES (?,?)";
                 PreparedStatement prepSt = conn.prepareStatement(sQuery);
                 prepSt.setString(1, status);
+                prepSt.setString(2, statusType);
                 prepSt.executeUpdate();
 
                 Statement idSt = conn.createStatement();
@@ -283,10 +330,11 @@ public class Equipment {
                 int statusId2 = result2.getInt("status_ID");
 
                 //update state of status with status id = statusId2
-                String sQuery2 = "UPDATE status SET state = ? WHERE status_ID = ?";
+                String sQuery2 = "UPDATE status SET state = ?, status_type = ? WHERE status_ID = ?";
                 PreparedStatement st3 = conn.prepareStatement(sQuery2);
                 st3.setString(1, status);
-                st3.setInt(2, statusId2);
+                st3.setString(2, statusType);
+                st3.setInt(3, statusId2);
                 st3.executeUpdate();
 
                 // update date inspected of equipment with equipment id = equipmentId
@@ -305,7 +353,7 @@ public class Equipment {
             st5.executeUpdate();
         }
         catch (SQLException e){
-
+            e.printStackTrace();
         }
         finally{
             if(conn != null)
@@ -314,16 +362,43 @@ public class Equipment {
     }
 
     // add comment to equipment
-    public static void addComment(int equipmentId, String comment) {
+    public static void addComment(int equipmentId, String comment, String supervisorId) {
         Connect newConnect = new Connect();
         Connection conn = newConnect.connect();
 
         try{
-            String query = "UPDATE equipment SET comment = ? WHERE equipment_ID = ?";
+            String query = "UPDATE equipment SET comment = ?, supervisor_ID = ? WHERE equipment_ID = ?";
             PreparedStatement st = conn.prepareStatement(query);
 
             st.setString(1, comment);
-            st.setInt(2, equipmentId);
+            st.setString(2, supervisorId);
+            st.setInt(3, equipmentId);
+
+            st.executeUpdate();
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        finally{
+            if(conn != null)
+                newConnect.disconnect(conn);
+        }
+    }
+
+    // update edited equipment
+    public static void updateEquipment(int equipmentId, String name, String description, int siteId, int inspectorId) {
+        Connect newConnect = new Connect();
+        Connection conn = newConnect.connect();
+
+        try{
+            String query = "UPDATE equipment SET name = ?, equipment_desc = ?, site_ID = ?, inspector_ID = ? WHERE equipment_ID = ?";
+            PreparedStatement st = conn.prepareStatement(query);
+
+            st.setString(1, name);
+            st.setString(2, description);
+            st.setInt(3, siteId);
+            st.setInt(4, inspectorId);
+            st.setInt(5, equipmentId);
 
             st.executeUpdate();
         }
@@ -336,7 +411,7 @@ public class Equipment {
         }
     }
 
-    public static void deleteEquipment(int equipmentId) {
+    public static void deleteEquipment(int equipmentId) throws Exception {
         Connect newConnect = new Connect();
         Connection conn = newConnect.connect();
 
@@ -349,7 +424,7 @@ public class Equipment {
             st.executeUpdate();
         }
         catch (SQLException e){
-
+            throw new Exception("SQL error");
         }
         finally {
             if(conn != null)

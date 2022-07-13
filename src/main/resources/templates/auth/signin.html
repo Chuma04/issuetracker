@@ -6,8 +6,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="icon" href="/assets/images/zescologo.png" type="image/x-icon"/>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!-- bootstrap 5 css -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/custom.css">
 </head>
@@ -33,7 +33,7 @@
                         <form class="needs-validation" th:action = "@{/signin}" method="POST" novalidate>
                             <div class="form-outline mb-4" th:object="${username}" style="text-align: left;">
                                 <label class="form-label" for="typeEmailX-2">Username</label>
-                                <input type="textl" id="typeEmailX-2" class="form-control form-control-lg" name="username" th:value="${username}" required>
+                                <input type="textl" id="typeEmailX-2" class="form-control form-control-lg" name="username" placeholder="Enter username" th:value="${username}" required>
                                 <div class="invalid-feedback">
                                     Please provide a username!
                                 </div>
@@ -41,13 +41,13 @@
 
                         <div class="form-outline mb-4" style="text-align: left;">
                             <label class="form-label" for="typePasswordX-2">Password</label>
-                            <input type="password" id="typePasswordX-2" name= "password" class="form-control form-control-lg" required/>
+                            <input type="password" id="typePasswordX-2" name= "password" class="form-control form-control-lg" placeholder="Enter password" required/>
                             <div class="invalid-feedback">
                                 Please provide password!
                             </div>
                         </div>
                         <br>
-                        <button class="btn btn-primary" type="submit">Sign In</button>
+                        <button class="btn btn-primary w-100" type="submit">Sign In</button>
                         </form>
 
                     </div>
