@@ -44,9 +44,10 @@ public class User {
             Statement usernameQueryStatement = conn.createStatement();
             ResultSet uResult = usernameQueryStatement.executeQuery(usernameQuery);
 
-
+            //checking if user exist
             if(uResult.next()){
-                Argon2PasswordEncoder hasher = new Argon2PasswordEncoder(32,64,1,15*1024,2);
+                Argon2PasswordEncoder hasher = new Argon2PasswordEncoder(
+                        32,64,1,15*1024,2);
 
                 String pwdQuery = "SELECT password FROM user WHERE username = '" + username + "'";
                 Statement pwdQueryStatement = conn.createStatement();
@@ -56,6 +57,7 @@ public class User {
 
                 String storedPwd = pResult.getString("password");
 
+                // checking if raw password matches the stored encrypted password
                 if(hasher.matches(pwd, storedPwd)){
                     String query = "SELECT user_ID FROM user WHERE username = '" + username + "'";
                     Statement queryStatement = conn.createStatement();
@@ -112,9 +114,10 @@ public class User {
             ResultSet uResult = uQueryStatement.executeQuery(uQuery);
 
             // finding unique username with concatenation of first name and last name
+            String tempUsername = username;
             int increment = 0;
             while(uResult.next()){
-                username = username + String.format("%02d", ++increment);
+                username = tempUsername + String.format("%02d", ++increment);
                 uQuery = "SELECT username FROM user WHERE username = '" + username + "'";
                 uResult = uQueryStatement.executeQuery(uQuery);
             }
@@ -154,13 +157,14 @@ public class User {
         Connect newConnect = new Connect();
         Connection conn = newConnect.connect();
 
+        //  deleting user from user table
         try{
             String dQuery = "DELETE FROM user WHERE user_ID = ?";
             PreparedStatement st = conn.prepareStatement(dQuery);
 
             st.setInt(1, userId);
 
-            st.executeQuery();
+            st.executeUpdate();
         }
         catch (SQLException e){
             System.out.println("A connection error occurred!");
